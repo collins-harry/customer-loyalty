@@ -1,0 +1,150 @@
+---
+title: Homework 2
+subtitle: Advanced Machine Learning
+author: Harry, Suhaib, Guido (group 37)
+date: 'Mon 17 Dec 2018'
+output: pdf_document
+urlcolor: blue
+linkcolor: black
+---
+
+# Exercise 1
+
+Exercise 1 part a
+---------------------------
+
+$\mu = (1/3,1/2)$ \
+$\pi = (1/2,1/2)$
+
+To calculate responsibilities we first calculate the $P(x|\mu)$ based on $h$ and $t$, use this to calculate the $P(x)$ and use both to calculate the responsibility.
+
+$$\begin{aligned}
+  P(x|\mu)_k &= {{h+t}\choose{h}} * \mu_k^h * (1-\mu_k)^t \\
+  P(x) &= \sum^k \pi_k * P(x|\mu)_k \\
+  \gamma_k &= \frac{\pi_k * P(x|\mu)_k}{P(x)}
+\end{aligned}$$
+
+          gamma(Zn1)           gamma(Zn2) 
+------    ---------            ------------    
+(1, 4)    0.6781456953642385   0.32185430463576153
+(3, 2)    0.34501347708894875  0.6549865229110512
+(4, 1)    0.20846905537459282  0.7915309446254072
+(2, 3)    0.5130260521042086   0.4869739478957915
+
+Exercise 1 part b
+---------------------------
+
+In order to get the new optimal mu we need to set the derivative of the expected value of log likelihood function with respect found latent variable distributions (the coin responsibilities)
+
+We first find the $N$ values, the estimated times the coins were used by summing over the responsibilities for that coin
+
+We then calculate $\mu$ by finding the average percentage value of the flips (percentage of heads). 
+$$\begin{aligned}
+  mu = \sum^j \left( \gamma_k^j * \frac{h^j}{h^j+t^j}\right) * \frac{1}{N_k}
+\end{aligned}$$
+where the sum sums over all the trials.
+
+We can calculate the new pi values using:
+$$\begin{aligned}
+  \pi_k = \frac{N_k}{\sum N}
+\end{aligned}$$
+
+
+N_0                     N_1
+--------------------    -------------------
+1.7446542799319884      2.2553457200680116
+--------------------    -------------------
+Table: estimated times the coins were used
+
+
+coin_1 prob_heads    coin_2 prob_head
+-------------------  ---------------
+0.4096071632572573   0.5699246452972468
+-------------------  ---------------
+Table: new mu values, $P(heads)$
+
+coin_1 prob_use      coin_2 prob_use
+------------------   ------------------
+0.4361635699829971   0.5638364300170029
+------------------   ------------------
+Table: new pi values
+
+Exercise 2
+==============
+
+##Exercise 2 part a
+
+###forward pass
+
+$$\begin{aligned}
+  \alpha_1(k) &= \pi_k * B_k(T), \\
+  \alpha_{t+1}(k) &= \left(\alpha_t \cdot A \right)_k * B_k(Obs)
+\end{aligned}$$
+
+
+t   $alpha_1$       $alpha_2$
+--- -----------     -------------
+1   0.35            0.1 
+2   0.14            0.05
+3   0.0258          0.0832
+4   0.018072        0.039008
+
+###backward pass
+
+$$\begin{aligned}
+  \beta_4(k) &= 1, \\
+  \beta_t(k) &= \left(A \cdot B(Obs_{t+1})\right)_k * \beta_{t+1}(k)
+\end{aligned}$$
+
+
+t       $beta_1$    $beta_2$
+----    ----------  --------
+4       0.11952     0.15248 
+3       0.312       0.268 
+2       0.6         0.5 
+1       1           1 
+
+Exercise 2 part b
+------------------
+
+sum over all alpha_4 (note alpha_4 is actually a square matrix)
+
+$alpha_{4,1}$         $alpha_{4,2}$
+--------------      -------------
+0.018072            0.039008 
+
+P(O|M) = 0.057080000000000006
+
+Exercise 2 part c
+---------------------
+
+### Observation 1
+
+$P(0) = 0.05708$
+
+### Gamma 1
+
+                gamma1
+---------       --------------------  --------------------
+gamma1_1        0.7328661527680447    0.26713384723195516 
+gamma1_2        0.7652417659425367    0.2347582340574632 
+gamma1_3        0.27119831814996487   0.7288016818500349 
+gamma1_4        0.3166082690960056    0.6833917309039943 
+
+### Eta 1
+
+\begin{align*}
+  eta1 &= \begin{bmatrix}
+    0.53566924 & 0.19719692 \\
+    0.22957253 & 0.03756132 
+  \end{bmatrix} \\
+  eta2 &= \begin{bmatrix}
+    0.17659425 & 0.58864751 \\
+    0.09460406 & 0.14015417  
+  \end{bmatrix} \\
+  eta3 &= \begin{bmatrix}
+    0.05423966 & 0.21695865 \\
+    0.26236861 & 0.46643308  
+  \end{bmatrix} 
+\end{align*}
+
