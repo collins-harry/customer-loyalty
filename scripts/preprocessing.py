@@ -47,7 +47,8 @@ def load_data(features = 'all', custom_features = [], shuffle = True):
     train_l = training_set[:,features+2]
     train_x = training_set[:,2:features+2]
 
-    testset_x = np.array(testdata)
+    testset = np.array(testdata)
+    testset_x = testset[:,2:features+2]
 
     return train_x, train_l, testset_x
 
