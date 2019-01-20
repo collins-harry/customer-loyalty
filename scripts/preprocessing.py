@@ -9,7 +9,7 @@ from sklearn.linear_model import LinearRegression
 def main():
     load_data()
 
-def load_data(features = 'all', custom_features = [], shuffle = True):
+def load_data(features = 'all', custom_features = [], shuffle = True, one_hot_encoding = True):
     '''
     Returns: train_x, train_l, testset_x
 
@@ -35,6 +35,11 @@ def load_data(features = 'all', custom_features = [], shuffle = True):
 
     data = pd.read_csv(current_dir+'/../all/train.csv')
     testdata = pd.read_csv(current_dir+ '/../all/test.csv')
+    if one_hot_encoding:
+        data = data.drop(['feature_1'],axis=1)
+        testdata = testdata.drop(['feature_1'],axis=1)
+        data = data.drop(['feature_2'],axis=1)
+        testdata = testdata.drop(['feature_2'],axis=1)
     
     data, testdata = add_features(features, custom_features, data, testdata, current_dir)
 
