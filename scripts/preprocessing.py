@@ -44,6 +44,7 @@ def load_data(features = 'all', custom_features = [], shuffle = True, one_hot_en
     data, testdata = add_features(features, custom_features, data, testdata, current_dir)
 
     training_set = np.array(data)
+    testset = np.array(testdata)
     features = training_set.shape[1] - 3
 
     if shuffle == True:
@@ -52,7 +53,6 @@ def load_data(features = 'all', custom_features = [], shuffle = True, one_hot_en
     train_l = training_set[:,features+2]
     train_x = training_set[:,2:features+2]
 
-    testset = np.array(testdata)
     testset_x = testset[:,2:features+2]
 
     return train_x, train_l, testset_x
